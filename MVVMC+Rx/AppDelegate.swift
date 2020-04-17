@@ -28,7 +28,7 @@ protocol Coordinator: AnyObject {
 }
 
 enum CoordinatorKey: String {
-    case collection
+    case collectionList
     case collectionDetail
 }
 
