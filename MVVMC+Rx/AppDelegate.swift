@@ -44,7 +44,50 @@ final class AppCoordinator: Coordinator {
 
     func start() {
         window.makeKeyAndVisible()
-
+        showList()
     }
+
+
+    // MARK: - show collection list
+    func showList() {
+        let listCoodinator: CollectionListCoordinator = CollectionListCoordinator(window: self.window)
+        coordinators[.collectionList] = listCoodinator
+        listCoodinator.delegate = self
+        listCoodinator.start()
+    }
+
+}
+
+extension AppCoordinator: CollectionListCoordinatorDelegate {
+
+    func CollectionListCoordinatorDidFinish(listCoordinator: CollectionListCoordinator) {
+        coordinators[.collectionList] = nil
+    }
+
+}
+
+protocol CollectionListCoordinatorDelegate: AnyObject {
+
+    func CollectionListCoordinatorDidFinish(listCoordinator: CollectionListCoordinator)
+
+}
+
+final class CollectionListCoordinator: Coordinator {
+
+    weak var delegate: CollectionListCoordinatorDelegate?
+
+    private let window: UIWindow
+
+    init(window: UIWindow) {
+        self.window = window
+    }
+
+    func start() {
+        window.rootViewController = CollectionListViewController()
+    }
+
+}
+
+final class CollectionListViewController: UIViewController {
 
 }
