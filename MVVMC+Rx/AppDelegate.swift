@@ -20,3 +20,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+protocol Coordinator: AnyObject {
+    func start()
+}
+
+enum CoordinatorKey: String {
+    case collection
+    case collectionDetail
+}
+
+final class AppCoordinator: Coordinator {
+
+    var coordinators: [CoordinatorKey: Coordinator] = .init()
+
+    private let window: UIWindow
+
+    init(window: UIWindow) {
+        self.window = window
+    }
+
+    func start() {
+        
+    }
+
+}
+
