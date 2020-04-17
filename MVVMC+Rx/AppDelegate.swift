@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window: UIWindow = .init()
+        self.window = window
         appCoordinator = AppCoordinator(window: window)
         appCoordinator?.start()
         return true
@@ -54,6 +55,9 @@ final class AppCoordinator: Coordinator {
         coordinators[.collectionList] = listCoodinator
         listCoodinator.delegate = self
         listCoodinator.start()
+
+        // make sure rootViewController isn't nil
+        assert(self.window.rootViewController != nil)
     }
 
 }
