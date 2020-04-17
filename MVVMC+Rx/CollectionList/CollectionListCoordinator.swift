@@ -24,7 +24,8 @@ final class CollectionListCoordinator: Coordinator {
 
     init(window: UIWindow, owner: String) {
         self.window = window
-        let interactor: CollectionListInteractor = CollectionListInteractor()
+        let interactor: CollectionListInteractor = CollectionListInteractor(owner: owner,
+                                                                            dataProvider: DataProvider.shared)
         // TODO: need to replace with detailCoordinator
         let coordinator: CollectionListCoordinator = CollectionListCoordinator(window: window, owner: owner)
         let viewModel: CollectionListViewModel = .init(interactor: interactor, coordinator: coordinator)

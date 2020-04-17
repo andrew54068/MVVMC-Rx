@@ -6,17 +6,32 @@
 //  Copyright © 2020 andrew. All rights reserved.
 //
 
+import RxRelay
+import RxSwift
+
 protocol CollectionListInteractorProtocol {
-    var model: [CollectionListModel] { get set }
+    var model: [CollectionModel] { get set }
     func fetch()
 }
 
 final class CollectionListInteractor: CollectionListInteractorProtocol {
 
-    var model: [CollectionListModel] = []
+    var modelObservable: Observable<[CollectionModel]> { return modelRelay.asObservable() }
+    private let modelRelay: BehaviorRelay<[CollectionModel]> = BehaviorRelay(value: [])
+    var model: [CollectionModel] = []
 
-    func fetch() {
+    private let owner: String
+    private let dataProvider: DataProvider
+
+    init(owner: String, dataProvider: DataProvider) {
+        self.owner = owner
+        self.dataProvider = dataProvider
     }
 
+    func fetch() {
+        DataProvider.shared.fetch(owner: owner) { models in
+            modelRelay.accept(models)
+        }
+    }
 
 }

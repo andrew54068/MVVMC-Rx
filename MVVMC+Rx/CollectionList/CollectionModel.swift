@@ -6,6 +6,6 @@
 //  Copyright © 2020 andrew. All rights reserved.
 //
 
-struct CollectionListModel: Decodable {
+struct CollectionModel: Decodable {
 
 }
