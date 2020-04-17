@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C1CD3E4A2449766B00B3B599 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E492449766B00B3B599 /* AppDelegate.swift */; };
-		C1CD3E4C2449766B00B3B599 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E4B2449766B00B3B599 /* SceneDelegate.swift */; };
 		C1CD3E4E2449766B00B3B599 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E4D2449766B00B3B599 /* ViewController.swift */; };
 		C1CD3E512449766B00B3B599 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1CD3E4F2449766B00B3B599 /* Main.storyboard */; };
 		C1CD3E532449766D00B3B599 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1CD3E522449766D00B3B599 /* Assets.xcassets */; };
@@ -29,7 +28,6 @@
 /* Begin PBXFileReference section */
 		C1CD3E462449766B00B3B599 /* MVVMC+Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVMC+Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1CD3E492449766B00B3B599 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C1CD3E4B2449766B00B3B599 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C1CD3E4D2449766B00B3B599 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C1CD3E502449766B00B3B599 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C1CD3E522449766D00B3B599 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -80,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				C1CD3E492449766B00B3B599 /* AppDelegate.swift */,
-				C1CD3E4B2449766B00B3B599 /* SceneDelegate.swift */,
 				C1CD3E4D2449766B00B3B599 /* ViewController.swift */,
 				C1CD3E4F2449766B00B3B599 /* Main.storyboard */,
 				C1CD3E522449766D00B3B599 /* Assets.xcassets */,
@@ -202,7 +199,6 @@
 			files = (
 				C1CD3E4E2449766B00B3B599 /* ViewController.swift in Sources */,
 				C1CD3E4A2449766B00B3B599 /* AppDelegate.swift in Sources */,
-				C1CD3E4C2449766B00B3B599 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +290,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -348,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -365,6 +361,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RPE89YVE3Q;
 				INFOPLIST_FILE = "MVVMC+Rx/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -383,6 +380,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RPE89YVE3Q;
 				INFOPLIST_FILE = "MVVMC+Rx/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
