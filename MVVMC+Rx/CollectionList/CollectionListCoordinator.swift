@@ -7,41 +7,26 @@
 //
 
 import UIKit
+import RxSwift
 
-protocol CollectionListCoordinatorDelegate: AnyObject {
-
-    func CollectionListCoordinatorDidFinish(listCoordinator: CollectionListCoordinator)
-
-}
-
-final class CollectionListCoordinator: Coordinator {
-
-    weak var delegate: CollectionListCoordinatorDelegate?
-
-    private let window: UIWindow
-    private lazy var navigator: UINavigationController = UINavigationController(rootViewController: listViewController)
-    private let listViewController: CollectionListViewController
-
-    init(window: UIWindow, owner: String) {
-        self.window = window
-        let interactor: CollectionListInteractor = CollectionListInteractor(owner: owner,
-                                                                            dataProvider: DataProvider.shared)
-        // TODO: need to replace with detailCoordinator
-        let coordinator: CollectionDetailCoordinator = CollectionDetailCoordinator()
-        let viewModel: CollectionListViewModel = .init(interactor: interactor, coordinator: coordinator)
-        listViewController = CollectionListViewController(viewModel: viewModel)
-    }
-
-    func start() {
-        window.rootViewController = navigator
-    }
+protocol CollectionListCoordinatorProtocol: AnyObject {
 
 }
 
-final class CollectionDetailCoordinator: Coordinator {
+final class CollectionListCoordinator: CollectionListCoordinatorProtocol {
 
-    func start() {
+    weak var navigator: UINavigationController?
 
+    func navigate(with model: CollectionModel) {
+        // Preparing the new calçot
+        let detailCoordinator = CollectionDetailCoordinator(navigator: navigator)
+        let detailInteractor = CollectionDetailInteractor(model: model)
+        let detailViewModel = CollectionDetailViewModel(interactor: detailInteractor,
+                                                        coordinator: detailCoordinator)
+        let detailViewController = CollectionDetailViewController(viewModel: detailViewModel)
+
+        navigator?.pushViewController(detailViewController, animated: true)
+        detailViewModel.modelSubject.onNext(model)
     }
 
 }

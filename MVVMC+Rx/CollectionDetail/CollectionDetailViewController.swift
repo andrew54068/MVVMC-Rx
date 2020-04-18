@@ -9,10 +9,12 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import RxCocoa
+import RxSwift
 
 final class CollectionDetailViewController: UIViewController {
 
-    let model: CollectionModel
+    let viewModel: CollectionDetailViewModel
 
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()
@@ -44,13 +46,16 @@ final class CollectionDetailViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .clear
         button.layer.cornerRadius = 10
-        button.clipsToBounds = true
+        button.clipsToBounds = true 
         return button
     }()
 
-    init(model: CollectionModel) {
-        self.model = model
+    private let bag: DisposeBag = .init()
+
+    init(viewModel: CollectionDetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        setupBindings()
     }
 
     required init?(coder: NSCoder) {
@@ -101,14 +106,20 @@ final class CollectionDetailViewController: UIViewController {
             make.height.equalTo(30)
         }
 
-        itemImageView.sd_setImage(with: model.imageUrl) { [weak self] (image, error, _, _) in
-            if error != nil || image == nil {
-                self?.itemImageView.image = UIImage(named: "notfound")
-            }
-        }
+    }
 
-        nameLabel.text = model.collectionName
-        desLabel.text = model.description
+    private func setupBindings() {
+
+        viewModel.modelObservable
+            .subscribe(onNext: { [weak self] model in
+                self?.itemImageView.sd_setImage(with: model.imageUrl) { (image, error, _, _) in
+                    if error != nil || image == nil {
+                        self?.itemImageView.image = UIImage(named: "notfound")
+                    }
+                }
+                self?.nameLabel.text = model.collectionName
+                self?.desLabel.text = model.description
+            }).disposed(by: bag)
 
     }
 

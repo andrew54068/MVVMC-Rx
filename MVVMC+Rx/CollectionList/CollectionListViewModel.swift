@@ -9,25 +9,25 @@
 import RxRelay
 import RxSwift
 
-protocol CollectionListViewModelProtocol {
-    var interactor: CollectionListInteractor { get set }
-    var coordinator: Coordinator { get set }
-}
+//protocol CollectionListViewModelProtocol {
+//    var interactor: CollectionListInteractor { get set }
+//    var coordinator: Coordinator { get set }
+//}
 
-final class CollectionListViewModel: CollectionListViewModelProtocol {
+final class CollectionListViewModel {
 
     let models: PublishSubject<[CollectionModel]> = PublishSubject()
     let loading: PublishSubject<Bool> = PublishSubject()
     let error: PublishSubject<Error> = PublishSubject()
 
     var interactor: CollectionListInteractor
-    var coordinator: Coordinator
+    var coordinator: CollectionListCoordinator
     var currentPage: Int = 0
 
     private let bag = DisposeBag()
 
     init(interactor: CollectionListInteractor,
-         coordinator: Coordinator) {
+         coordinator: CollectionListCoordinator) {
         self.interactor = interactor
         self.coordinator = coordinator
     }
@@ -53,6 +53,10 @@ final class CollectionListViewModel: CollectionListViewModelProtocol {
                 }
             })
             .disposed(by: bag)
+    }
+
+    func present(with model: CollectionModel) {
+        coordinator.navigate(with: model)
     }
 
 }
