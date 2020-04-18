@@ -15,11 +15,12 @@ final class CollectionListViewController: UIViewController {
 
     private let collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = .init()
-        layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 90)
+        layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 150)
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
+        layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .red
+        collectionView.backgroundColor = .systemGray
         return collectionView
     }()
 
@@ -59,6 +60,16 @@ final class CollectionListViewController: UIViewController {
             .bind(to: self.rx.isLoading)
             .disposed(by: bag)
 
-//        viewModel.models
+        let cellType: CollectionListCollectionViewCell.Type = CollectionListCollectionViewCell.self
+        collectionView.registerCell(type: cellType)
+
+        viewModel.models
+            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: cellType),
+                                              cellType: cellType)) { _, model, cell in
+                                                cell.setup(model: model)
+        }
+        .disposed(by: bag)
+
+
     }
 }

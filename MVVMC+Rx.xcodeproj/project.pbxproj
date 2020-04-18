@@ -23,6 +23,8 @@
 		C1CD3E83244ACF3700B3B599 /* AssetApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E81244ACF3700B3B599 /* AssetApi.swift */; };
 		C1CD3E87244AE49500B3B599 /* ReactiveExtensiones.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E86244AE49500B3B599 /* ReactiveExtensiones.swift */; };
 		C1CD3E89244AE4FE00B3B599 /* LoadingViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E88244AE4FE00B3B599 /* LoadingViewable.swift */; };
+		C1CD3E8C244AF1F900B3B599 /* CollectionListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E8B244AF1F900B3B599 /* CollectionListCollectionViewCell.swift */; };
+		C1CD3E8E244AF5EF00B3B599 /* CollectionViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E8D244AF5EF00B3B599 /* CollectionViewExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		C1CD3E81244ACF3700B3B599 /* AssetApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetApi.swift; sourceTree = "<group>"; };
 		C1CD3E86244AE49500B3B599 /* ReactiveExtensiones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveExtensiones.swift; sourceTree = "<group>"; };
 		C1CD3E88244AE4FE00B3B599 /* LoadingViewable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewable.swift; sourceTree = "<group>"; };
+		C1CD3E8B244AF1F900B3B599 /* CollectionListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionListCollectionViewCell.swift; sourceTree = "<group>"; };
+		C1CD3E8D244AF5EF00B3B599 /* CollectionViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewExtension.swift; sourceTree = "<group>"; };
 		C45238FCEE31C5F7E7AEA1C2 /* Pods-MVVMC+RxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVMC+RxTests.debug.xcconfig"; path = "Target Support Files/Pods-MVVMC+RxTests/Pods-MVVMC+RxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E9DE50255635DE0FB0435259 /* Pods-MVVMC+Rx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVMC+Rx.debug.xcconfig"; path = "Target Support Files/Pods-MVVMC+Rx/Pods-MVVMC+Rx.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +129,7 @@
 		C1CD3E482449766B00B3B599 /* MVVMC+Rx */ = {
 			isa = PBXGroup;
 			children = (
+				C1CD3E8A244AF1BB00B3B599 /* Components */,
 				C1CD3E85244AE48100B3B599 /* Helper */,
 				C1CD3E80244ACEA600B3B599 /* DataProvider */,
 				C1CD3E73244991E500B3B599 /* CollectionList */,
@@ -172,8 +177,17 @@
 			children = (
 				C1CD3E86244AE49500B3B599 /* ReactiveExtensiones.swift */,
 				C1CD3E88244AE4FE00B3B599 /* LoadingViewable.swift */,
+				C1CD3E8D244AF5EF00B3B599 /* CollectionViewExtension.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		C1CD3E8A244AF1BB00B3B599 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C1CD3E8B244AF1F900B3B599 /* CollectionListCollectionViewCell.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,9 +358,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1CD3E7D2449932800B3B599 /* CollectionListViewModel.swift in Sources */,
+				C1CD3E8E244AF5EF00B3B599 /* CollectionViewExtension.swift in Sources */,
 				C1CD3E792449922A00B3B599 /* CollectionListCoordinator.swift in Sources */,
 				C1CD3E7F2449F5C300B3B599 /* DataProvider.swift in Sources */,
 				C1CD3E89244AE4FE00B3B599 /* LoadingViewable.swift in Sources */,
+				C1CD3E8C244AF1F900B3B599 /* CollectionListCollectionViewCell.swift in Sources */,
 				C1CD3E7B2449923A00B3B599 /* CollectionModel.swift in Sources */,
 				C1CD3E772449921300B3B599 /* CollectionListInteractor.swift in Sources */,
 				C1CD3E752449920300B3B599 /* CollectionListViewController.swift in Sources */,
