@@ -15,7 +15,7 @@ final class CollectionListViewController: UIViewController {
 
     private let collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = .init()
-        layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 150)
+        layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 200)
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
@@ -70,6 +70,16 @@ final class CollectionListViewController: UIViewController {
         }
         .disposed(by: bag)
 
+
+        viewModel.error
+            .subscribe { error in
+                let alert = UIAlertController(title: "Error",
+                                              message: error.debugDescription,
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+        }
+        .disposed(by: bag)
 
     }
 }

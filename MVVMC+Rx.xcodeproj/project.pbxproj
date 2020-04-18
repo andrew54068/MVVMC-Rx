@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0EC1BD57AB51CB10952D3B50 /* Pods_MVVMC_Rx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91363FDB2974267A5F11753C /* Pods_MVVMC_Rx.framework */; };
 		311CE27FA3742C4B1E81BBE0 /* Pods_MVVMC_RxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 412BABA79F98504425D3BF3B /* Pods_MVVMC_RxTests.framework */; };
+		C1CC7BE8244B00CC00C682B6 /* SVGProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC7BE7244B00CC00C682B6 /* SVGProcessor.swift */; };
+		C1CC7BEA244B07F800C682B6 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC7BE9244B07F800C682B6 /* UIImageExtension.swift */; };
+		C1CC7BEC244B307600C682B6 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC7BEB244B307600C682B6 /* DataExtension.swift */; };
 		C1CD3E4A2449766B00B3B599 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E492449766B00B3B599 /* AppDelegate.swift */; };
 		C1CD3E4E2449766B00B3B599 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3E4D2449766B00B3B599 /* ViewController.swift */; };
 		C1CD3E532449766D00B3B599 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1CD3E522449766D00B3B599 /* Assets.xcassets */; };
@@ -42,6 +45,9 @@
 		412BABA79F98504425D3BF3B /* Pods_MVVMC_RxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVMC_RxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DE13E9FCDE70D6E99275AD4 /* Pods-MVVMC+Rx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVMC+Rx.release.xcconfig"; path = "Target Support Files/Pods-MVVMC+Rx/Pods-MVVMC+Rx.release.xcconfig"; sourceTree = "<group>"; };
 		91363FDB2974267A5F11753C /* Pods_MVVMC_Rx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVMC_Rx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1CC7BE7244B00CC00C682B6 /* SVGProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGProcessor.swift; sourceTree = "<group>"; };
+		C1CC7BE9244B07F800C682B6 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		C1CC7BEB244B307600C682B6 /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		C1CD3E462449766B00B3B599 /* MVVMC+Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVMC+Rx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1CD3E492449766B00B3B599 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C1CD3E4D2449766B00B3B599 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -177,7 +183,10 @@
 			children = (
 				C1CD3E86244AE49500B3B599 /* ReactiveExtensiones.swift */,
 				C1CD3E88244AE4FE00B3B599 /* LoadingViewable.swift */,
+				C1CC7BE7244B00CC00C682B6 /* SVGProcessor.swift */,
 				C1CD3E8D244AF5EF00B3B599 /* CollectionViewExtension.swift */,
+				C1CC7BE9244B07F800C682B6 /* UIImageExtension.swift */,
+				C1CC7BEB244B307600C682B6 /* DataExtension.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -243,6 +252,7 @@
 				TargetAttributes = {
 					C1CD3E452449766B00B3B599 = {
 						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1130;
 					};
 					C1CD3E5B2449766D00B3B599 = {
 						CreatedOnToolsVersion = 11.3;
@@ -358,12 +368,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1CD3E7D2449932800B3B599 /* CollectionListViewModel.swift in Sources */,
+				C1CC7BE8244B00CC00C682B6 /* SVGProcessor.swift in Sources */,
 				C1CD3E8E244AF5EF00B3B599 /* CollectionViewExtension.swift in Sources */,
 				C1CD3E792449922A00B3B599 /* CollectionListCoordinator.swift in Sources */,
 				C1CD3E7F2449F5C300B3B599 /* DataProvider.swift in Sources */,
+				C1CC7BEC244B307600C682B6 /* DataExtension.swift in Sources */,
 				C1CD3E89244AE4FE00B3B599 /* LoadingViewable.swift in Sources */,
 				C1CD3E8C244AF1F900B3B599 /* CollectionListCollectionViewCell.swift in Sources */,
 				C1CD3E7B2449923A00B3B599 /* CollectionModel.swift in Sources */,
+				C1CC7BEA244B07F800C682B6 /* UIImageExtension.swift in Sources */,
 				C1CD3E772449921300B3B599 /* CollectionListInteractor.swift in Sources */,
 				C1CD3E752449920300B3B599 /* CollectionListViewController.swift in Sources */,
 				C1CD3E4E2449766B00B3B599 /* ViewController.swift in Sources */,
@@ -522,6 +535,7 @@
 			baseConfigurationReference = E9DE50255635DE0FB0435259 /* Pods-MVVMC+Rx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RPE89YVE3Q;
 				INFOPLIST_FILE = "MVVMC+Rx/Info.plist";
@@ -532,6 +546,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.andrew.MVVMC-Rx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -542,6 +558,7 @@
 			baseConfigurationReference = 5DE13E9FCDE70D6E99275AD4 /* Pods-MVVMC+Rx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RPE89YVE3Q;
 				INFOPLIST_FILE = "MVVMC+Rx/Info.plist";
@@ -552,6 +569,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.andrew.MVVMC-Rx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

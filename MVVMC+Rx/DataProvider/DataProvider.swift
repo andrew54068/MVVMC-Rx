@@ -45,17 +45,24 @@ class DataProvider {
 extension MoyaProvider {
 
     final class var `default`: MoyaProvider {
-        return MoyaProvider<Target>()
+        return MoyaProvider<Target>(plugins: [NetworkLogger()])
     }
 
 }
 
-extension Data {
+class NetworkLogger: PluginType {
 
-    func decode<Model: Decodable>(type: Model.Type, decoder: JSONDecoder = JSONDecoder()) throws -> Model {
-        let decoder: JSONDecoder = .init()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(type, from: self)
+    func willSend(_ request: RequestType, target: TargetType) {
+        print(request.request?.httpBody?.jsonPrettyPrinted() ?? "httpBody is nil")
+    }
+
+    func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
+        switch result {
+        case let .success(response):
+            print(response.data.jsonPrettyPrinted())
+        case let .failure(error):
+            print(error)
+        }
     }
 
 }
