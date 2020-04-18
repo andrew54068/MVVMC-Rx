@@ -11,7 +11,7 @@ import RxSwift
 
 protocol CollectionListInteractorProtocol {
     var modelObservable: Observable<[CollectionModel]> { get }
-    func fetch() -> Observable<[CollectionModel]>
+    func fetch(page: Int) -> Observable<[CollectionModel]>
 }
 
 final class CollectionListInteractor: CollectionListInteractorProtocol {
@@ -27,10 +27,10 @@ final class CollectionListInteractor: CollectionListInteractorProtocol {
         self.dataProvider = dataProvider
     }
 
-    func fetch() -> Observable<[CollectionModel]> {
+    func fetch(page: Int) -> Observable<[CollectionModel]> {
         return Observable<[CollectionModel]>.create { [weak self] observer -> Disposable in
             guard let self = self else { return Disposables.create() }
-            DataProvider.shared.fetch(owner: self.owner) { result in
+            DataProvider.shared.fetch(owner: self.owner, page: page) { result in
                 switch result {
                 case let .model(collectionModels):
                     observer.onNext(collectionModels)

@@ -18,6 +18,7 @@ final class CollectionListViewModel: CollectionListViewModelProtocol {
 
     var interactor: CollectionListInteractor
     var coordinator: Coordinator
+    var currentPage: Int = 0
 
     private let bag = DisposeBag()
 
@@ -28,7 +29,20 @@ final class CollectionListViewModel: CollectionListViewModelProtocol {
     }
 
     func fetchData() -> Observable<[CollectionModel]> {
-        return interactor.fetch()
+        let observer: Observable<[CollectionModel]> = interactor.fetch(page: currentPage)
+        observer
+            .observeOn(MainScheduler.instance)
+            .subscribe({ [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .next:
+                    self.currentPage += 1
+                default:
+                    ()
+                }
+            })
+            .disposed(by: bag)
+        return observer
     }
 
 }

@@ -31,7 +31,10 @@ final class CollectionListViewController: UIViewController {
 
     private func setupBindings() {
         let observer: Observable<[CollectionModel]> = viewModel.fetchData()
-        observer.subscribe({ event in
+
+        observer
+            .observeOn(MainScheduler.instance)
+            .subscribe({ event in
             switch event {
             case let .next(models):
                 print("success")
@@ -40,6 +43,7 @@ final class CollectionListViewController: UIViewController {
             case .completed:
                 print("complete")
             }
-        }).disposed(by: bag)
+        })
+            .disposed(by: bag)
     }
 }
