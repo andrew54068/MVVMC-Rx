@@ -52,12 +52,17 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(itemImageView.snp.bottom).offset(10)
             make.left.equalTo(contentView).offset(10)
             make.bottom.right.equalTo(contentView).offset(-10)
+            make.height.greaterThanOrEqualTo(30)
         }
 
     }
 
     func setup(model: CollectionModel) {
-        itemImageView.sd_setImage(with: model.imageUrl)
+        itemImageView.sd_setImage(with: model.imageUrl) { [weak self] (image, error, _, _) in
+            if error != nil || image == nil {
+                self?.itemImageView.image = UIImage(named: "notfound")
+            }
+        }
         nameLabel.text = model.name
     }
 }
