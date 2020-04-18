@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import Kingfisher
-import WebKit
 import SnapKit
+import SDWebImage
 
 final class CollectionListCollectionViewCell: UICollectionViewCell {
 
@@ -28,12 +27,6 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    private let webView: WKWebView = {
-        let webView: WKWebView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
-        webView.isUserInteractionEnabled = false
-        return webView
-    }()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -49,7 +42,6 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         contentView.addSubview(itemImageView)
         contentView.addSubview(nameLabel)
-        contentView.addSubview(webView)
 
         itemImageView.snp.makeConstraints { make in
             make.top.left.equalTo(contentView).offset(10)
@@ -62,28 +54,10 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
             make.bottom.right.equalTo(contentView).offset(-10)
         }
 
-        webView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(itemImageView)
-        }
-
-        layoutIfNeeded()
-
     }
 
     func setup(model: CollectionModel) {
-        itemImageView.isHidden = false
-        webView.isHidden = false
-        if let url: URL = model.imageUrl,
-            url.absoluteString.contains(".svg") {
-            itemImageView.isHidden = true
-
-            if let svgString = try? String(contentsOf: url) {
-                webView.loadHTMLString(svgString, baseURL: nil)
-            }
-        } else {
-            webView.isHidden = true
-            itemImageView.kf.setImage(with: model.imageUrl)
-        }
+        itemImageView.sd_setImage(with: model.imageUrl)
         nameLabel.text = model.name
     }
 }

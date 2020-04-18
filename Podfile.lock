@@ -1,8 +1,8 @@
 PODS:
   - Alamofire (5.0.4)
-  - Kingfisher (5.13.2):
-    - Kingfisher/Core (= 5.13.2)
-  - Kingfisher/Core (5.13.2)
+  - CocoaLumberjack (3.6.1):
+    - CocoaLumberjack/Core (= 3.6.1)
+  - CocoaLumberjack/Core (3.6.1)
   - Moya (14.0.0):
     - Moya/Core (= 14.0.0)
   - Moya/Core (14.0.0):
@@ -13,33 +13,45 @@ PODS:
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
+  - SDWebImage/Core (5.6.1)
+  - SDWebImageSVGKitPlugin (1.2.0):
+    - SDWebImage/Core (~> 5.6)
+    - SVGKit (>= 2.1)
   - SnapKit (5.0.1)
+  - SVGKit (2.1.1):
+    - CocoaLumberjack (~> 3.0)
 
 DEPENDENCIES:
-  - Kingfisher
   - Moya
   - RxCocoa
+  - SDWebImageSVGKitPlugin
   - SnapKit
 
 SPEC REPOS:
   trunk:
     - Alamofire
-    - Kingfisher
+    - CocoaLumberjack
     - Moya
     - RxCocoa
     - RxRelay
     - RxSwift
+    - SDWebImage
+    - SDWebImageSVGKitPlugin
     - SnapKit
+    - SVGKit
 
 SPEC CHECKSUMS:
   Alamofire: 0fe5fd24b4298dc377a6550da7d5f1b30e286fcb
-  Kingfisher: d342c8354c10c3d85a27d6d4c42c41285924b898
+  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
+  SDWebImageSVGKitPlugin: 06a811c05b9e839982baeb5251d15fe7a79abb82
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SVGKit: 652cdf7bef8bec8564d04a8511d3ab50c7595fac
 
-PODFILE CHECKSUM: e0c7cb85da26b44c342ca6ec55c800048c5ab493
+PODFILE CHECKSUM: 3a69a9474a9f60ddfe7afc2cc45e485b68bdd325
 
 COCOAPODS: 1.8.4

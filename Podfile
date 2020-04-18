@@ -9,7 +9,7 @@ target 'MVVMC+Rx' do
   pod 'RxCocoa'
   pod 'Moya'
   pod 'SnapKit'
-  pod 'Kingfisher'
+  pod 'SDWebImageSVGKitPlugin'
 
   target 'MVVMC+RxTests' do
     inherit! :search_paths
