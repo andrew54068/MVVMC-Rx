@@ -29,8 +29,8 @@ class DataProvider {
             switch result {
             case let .success(response):
                 do {
-                    let models: [CollectionModel] = try response.data.decode(type: [CollectionModel].self)
-                    completion(.model(models))
+                    let model: CollectionContainerModel = try response.data.decode(type: CollectionContainerModel.self)
+                    completion(.model(model.assets))
                 } catch {
                     completion(.error(error))
                 }
@@ -53,6 +53,8 @@ extension MoyaProvider {
 extension Data {
 
     func decode<Model: Decodable>(type: Model.Type, decoder: JSONDecoder = JSONDecoder()) throws -> Model {
+        let decoder: JSONDecoder = .init()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(type, from: self)
     }
 
