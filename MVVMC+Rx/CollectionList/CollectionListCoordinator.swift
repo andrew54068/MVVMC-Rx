@@ -27,13 +27,21 @@ final class CollectionListCoordinator: Coordinator {
         let interactor: CollectionListInteractor = CollectionListInteractor(owner: owner,
                                                                             dataProvider: DataProvider.shared)
         // TODO: need to replace with detailCoordinator
-        let coordinator: CollectionListCoordinator = CollectionListCoordinator(window: window, owner: owner)
+        let coordinator: CollectionDetailCoordinator = CollectionDetailCoordinator()
         let viewModel: CollectionListViewModel = .init(interactor: interactor, coordinator: coordinator)
         listViewController = CollectionListViewController(viewModel: viewModel)
     }
 
     func start() {
         window.rootViewController = navigator
+    }
+
+}
+
+final class CollectionDetailCoordinator: Coordinator {
+
+    func start() {
+
     }
 
 }
