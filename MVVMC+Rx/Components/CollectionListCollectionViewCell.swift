@@ -37,7 +37,7 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .systemGray
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
         contentView.addSubview(itemImageView)

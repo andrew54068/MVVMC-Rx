@@ -20,7 +20,7 @@ final class CollectionListViewController: UIViewController {
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemGray
+        collectionView.backgroundColor = .white
         return collectionView
     }()
 
@@ -47,11 +47,7 @@ final class CollectionListViewController: UIViewController {
     private func setupUI() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
-            } else {
-                make.edges.equalTo(view.layoutMarginsGuide.snp.edges)
-            }
+            make.edges.equalTo(view)
         }
     }
 
@@ -78,6 +74,15 @@ final class CollectionListViewController: UIViewController {
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
+        }
+        .disposed(by: bag)
+
+        Observable
+            .zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(CollectionModel.self))
+            .bind { [weak self] indexPath, model in
+                print("选中项的indexPath为：\(indexPath)")
+                print("选中项的标题为：\(model)")
+                self?.navigationController?.pushViewController(CollectionDetailViewController(model: model), animated: true)
         }
         .disposed(by: bag)
 
