@@ -7,9 +7,21 @@
 //
 
 import UIKit
+import RxCocoa
 import RxSwift
+import SnapKit
 
 final class CollectionListViewController: UIViewController {
+
+    private let collectionView: UICollectionView = {
+        let layout: UICollectionViewFlowLayout = .init()
+        layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 90)
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .red
+        return collectionView
+    }()
 
     private let viewModel: CollectionListViewModel
 
@@ -26,24 +38,27 @@ final class CollectionListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         setupBindings()
+        viewModel.fetchData()
+    }
+
+    private func setupUI() {
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+            } else {
+                make.edges.equalTo(view.layoutMarginsGuide.snp.edges)
+            }
+        }
     }
 
     private func setupBindings() {
-        let observer: Observable<[CollectionModel]> = viewModel.fetchData()
-
-        observer
-            .observeOn(MainScheduler.instance)
-            .subscribe({ event in
-            switch event {
-            case let .next(models):
-                print("success")
-            case let .error(error):
-                print(error)
-            case .completed:
-                print("complete")
-            }
-        })
+        viewModel.loading
+            .bind(to: self.rx.isLoading)
             .disposed(by: bag)
+
+//        viewModel.models
     }
 }

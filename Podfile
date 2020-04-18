@@ -8,6 +8,7 @@ target 'MVVMC+Rx' do
   # Pods for MVVMC+Rx
   pod 'RxCocoa'
   pod 'Moya'
+  pod 'SnapKit'
 
   target 'MVVMC+RxTests' do
     inherit! :search_paths

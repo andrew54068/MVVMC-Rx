@@ -16,6 +16,10 @@ protocol CollectionListViewModelProtocol {
 
 final class CollectionListViewModel: CollectionListViewModelProtocol {
 
+    let models: PublishSubject<[CollectionModel]> = PublishSubject()
+    let loading: PublishSubject<Bool> = PublishSubject()
+    let error: PublishSubject<Error> = PublishSubject()
+
     var interactor: CollectionListInteractor
     var coordinator: Coordinator
     var currentPage: Int = 0
@@ -28,21 +32,27 @@ final class CollectionListViewModel: CollectionListViewModelProtocol {
         self.coordinator = coordinator
     }
 
-    func fetchData() -> Observable<[CollectionModel]> {
+    func fetchData() {
+        loading.onNext(true)
         let observer: Observable<[CollectionModel]> = interactor.fetch(page: currentPage)
         observer
             .observeOn(MainScheduler.instance)
             .subscribe({ [weak self] event in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self?.loading.onNext(false)
+                }
                 guard let self = self else { return }
                 switch event {
-                case .next:
+                case let .next(models):
                     self.currentPage += 1
+                    self.models.onNext(models)
+                case let .error(error):
+                    self.error.onNext(error)
                 default:
                     ()
                 }
             })
             .disposed(by: bag)
-        return observer
     }
 
 }
