@@ -17,6 +17,7 @@ struct BalanceModel: Decodable {
         let result: Decimal = decimal / devider
         let formatter: NumberFormatter = NumberFormatter()
         formatter.maximumFractionDigits = 8
+        formatter.minimumIntegerDigits = 1
         return "ether balance: " + (formatter.string(from: (result as NSDecimalNumber)) ?? "0")
     }
 }
