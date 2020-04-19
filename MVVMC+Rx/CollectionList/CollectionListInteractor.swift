@@ -10,14 +10,11 @@ import RxRelay
 import RxSwift
 
 protocol CollectionListInteractorProtocol {
-    var modelObservable: Observable<[CollectionModel]> { get }
-    func fetch(page: Int) -> Observable<[CollectionModel]>
+    func fetchAssets(page: Int) -> Observable<[CollectionModel]>
+    func getBalance() -> Observable<String>
 }
 
 final class CollectionListInteractor: CollectionListInteractorProtocol {
-    
-    var modelObservable: Observable<[CollectionModel]> { return modelSubject.asObservable() }
-    private let modelSubject: PublishSubject<[CollectionModel]> = PublishSubject()
 
     private let owner: String
     private let dataProvider: DataProvider
@@ -27,7 +24,7 @@ final class CollectionListInteractor: CollectionListInteractorProtocol {
         self.dataProvider = dataProvider
     }
 
-    func fetch(page: Int) -> Observable<[CollectionModel]> {
+    func fetchAssets(page: Int) -> Observable<[CollectionModel]> {
         return Observable<[CollectionModel]>.create { [weak self] observer -> Disposable in
             guard let self = self else { return Disposables.create() }
             DataProvider.shared.fetch(owner: self.owner, page: page) { result in

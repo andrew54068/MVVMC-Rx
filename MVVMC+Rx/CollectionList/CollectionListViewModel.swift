@@ -16,21 +16,21 @@ final class CollectionListViewModel {
     let loading: PublishSubject<Bool> = PublishSubject()
     let error: PublishSubject<Error> = PublishSubject()
 
-    var interactor: CollectionListInteractor
-    var coordinator: CollectionListCoordinator
+    var interactor: CollectionListInteractorProtocol
+    var coordinator: CollectionListCoordinatorProtocol
     var currentPage: Int = 0
 
     private let bag = DisposeBag()
 
-    init(interactor: CollectionListInteractor,
-         coordinator: CollectionListCoordinator) {
+    init(interactor: CollectionListInteractorProtocol,
+         coordinator: CollectionListCoordinatorProtocol) {
         self.interactor = interactor
         self.coordinator = coordinator
     }
 
     func fetchData() {
         loading.onNext(true)
-        let observer: Observable<[CollectionModel]> = interactor.fetch(page: currentPage)
+        let observer: Observable<[CollectionModel]> = interactor.fetchAssets(page: currentPage)
         observer
             .observeOn(MainScheduler.instance)
             .subscribe({ [weak self] event in

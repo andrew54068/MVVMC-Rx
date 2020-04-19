@@ -10,7 +10,8 @@ import UIKit
 import RxSwift
 
 protocol CollectionListCoordinatorProtocol: AnyObject {
-
+    var navigator: UINavigationController? { get set }
+    func navigate(with model: CollectionModel)
 }
 
 final class CollectionListCoordinator: CollectionListCoordinatorProtocol {

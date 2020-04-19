@@ -45,4 +45,22 @@ struct CollectionModel: Decodable {
         self.collectionName = try collectionContainer.decode(String.self, forKey: .name)
     }
 
+    init(tokenId: String,
+         imageUrl: URL? = nil,
+         name: String,
+         description: String? = nil,
+         permalink: URL? = nil,
+         collectionName: String) {
+        #if DEBUG
+        self.tokenId = tokenId
+        self.imageUrl = imageUrl
+        self.name = name
+        self.description = description
+        self.permalink = permalink
+        self.collectionName = collectionName
+        #else
+        fatalError()
+        #endif
+    }
+
 }

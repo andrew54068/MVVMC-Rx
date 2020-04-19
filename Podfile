@@ -13,7 +13,7 @@ target 'MVVMC+Rx' do
 
   target 'MVVMC+RxTests' do
     inherit! :search_paths
-    # Pods for testing
+    pod 'RxCocoa'
   end
 
 end
