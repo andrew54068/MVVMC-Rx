@@ -20,7 +20,7 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
 
     private var nameLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.textColor = .systemGray
+        label.textColor = .black
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 13)
         label.numberOfLines = 0

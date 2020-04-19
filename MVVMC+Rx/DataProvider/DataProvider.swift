@@ -14,6 +14,11 @@ enum CollectionModelResult {
     case error(Error)
 }
 
+enum BalanceModelResult {
+    case model(String)
+    case error(Error)
+}
+
 class DataProvider {
 
     typealias ResponseSuccess<Model: Decodable> = (Model) -> Void
@@ -31,6 +36,23 @@ class DataProvider {
                 do {
                     let model: CollectionContainerModel = try response.data.decode(type: CollectionContainerModel.self)
                     completion(.model(model.assets))
+                } catch {
+                    completion(.error(error))
+                }
+            case let .failure(moyaError):
+                completion(.error(moyaError))
+            }
+        }
+    }
+
+    func getBalance(address: String, completion: @escaping (BalanceModelResult) -> Void) {
+        let target: AssetApi = .balance(address: address)
+        MoyaProvider.default.request(target) { result in
+            switch result {
+            case let .success(response):
+                do {
+                    let model: BalanceModel = try response.data.decode(type: BalanceModel.self)
+                    completion(.model(model.balanceValue))
                 } catch {
                     completion(.error(error))
                 }

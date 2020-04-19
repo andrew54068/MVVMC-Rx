@@ -117,8 +117,9 @@ final class CollectionDetailViewController: UIViewController {
                         self?.itemImageView.image = UIImage(named: "notfound")
                     }
                 }
-                self?.nameLabel.text = model.collectionName
+                self?.nameLabel.text = model.name
                 self?.desLabel.text = model.description
+                self?.title = model.collectionName
             }).disposed(by: bag)
 
     }

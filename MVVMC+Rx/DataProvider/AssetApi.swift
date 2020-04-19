@@ -10,14 +10,21 @@ import Moya
 
 enum AssetApi: TargetType {
     case asset(owner: String, page: Int)
+    case balance(address: String)
 
     var baseURL: URL {
-        return URL(string: "https://api.opensea.io/")!
+        switch self {
+        case .asset:
+            return URL(string: "https://api.opensea.io/")!
+        case .balance:
+            return URL(string: "https://api.etherscan.io/")!
+        }
     }
 
     var path: String {
         switch self {
         case .asset: return "api/v1/assets"
+        case .balance: return "api/"
         }
     }
 
@@ -34,6 +41,11 @@ enum AssetApi: TargetType {
                                                    "owner": owner,
                                                    "offset": page,
                                                    "limit": 20],
+                                      encoding: URLEncoding.default)
+        case let .balance(address):
+            return .requestParameters(parameters: ["module": "account",
+                                                   "action": "balance",
+                                                   "address": address],
                                       encoding: URLEncoding.default)
         }
     }

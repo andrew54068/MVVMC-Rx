@@ -42,4 +42,19 @@ final class CollectionListInteractor: CollectionListInteractorProtocol {
         }
     }
 
+    func getBalance() -> Observable<String> {
+        return Observable<String>.create { [weak self] observer -> Disposable in
+            guard let self = self else { return Disposables.create() }
+            DataProvider.shared.getBalance(address: self.owner) { result in
+                switch result {
+                case let .model(balance):
+                    observer.onNext(balance)
+                case let .error(error):
+                    observer.onError(error)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+
 }

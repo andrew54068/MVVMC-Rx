@@ -41,6 +41,7 @@ final class CollectionListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupNavigation()
         viewModel.fetchData()
     }
 
@@ -52,6 +53,13 @@ final class CollectionListViewController: UIViewController {
     }
 
     private func setupBindings() {
+
+        viewModel.balance
+            .subscribe(onNext: { [weak self] balance in
+                self?.title = balance
+                })
+            .disposed(by: bag)
+
         viewModel.loading
             .bind(to: self.rx.isLoading)
             .disposed(by: bag)
@@ -84,5 +92,9 @@ final class CollectionListViewController: UIViewController {
         }
         .disposed(by: bag)
 
+    }
+
+    private func setupNavigation() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "list", style: .plain, target: self, action: nil)
     }
 }
