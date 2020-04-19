@@ -1,6 +1,6 @@
 # MVVMC-Rx
 
-[![Actions Status](https://github.com/andrew54068/MVVMC-Rx/workflows/pull_request/badge.svg)](https://github.com/andrew54068/MVVMC-Rx/actions)
+[![Actions Status](https://github.com/andrew54068/MVVMC-Rx/workflows/push/badge.svg)](https://github.com/andrew54068/MVVMC-Rx/actions)
 
 ![GitHub](https://img.shields.io/github/license/andrew54068/MVVMC-Rx)
 
