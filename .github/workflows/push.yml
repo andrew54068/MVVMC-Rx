@@ -28,6 +28,6 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: clean build and test
-      run: xcodebuild clean test -workspace NLNetwork.xcworkspace -scheme "NLNetworkTests" -destination "${destination}"
+      run: xcodebuild clean test -workspace MVVMC+Rx.xcworkspace -scheme "MVVMC+Rx" -destination "${destination}"
       env: 
          destination: ${{ matrix.destination }}
