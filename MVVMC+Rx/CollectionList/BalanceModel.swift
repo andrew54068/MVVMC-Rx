@@ -13,7 +13,7 @@ struct BalanceModel: Decodable {
 
     var balanceValue: String {
         let decimal: Decimal = Decimal(string: result) ?? .nan
-        let devider: Decimal = pow(Decimal(string: "10") ?? .nan, 18)
+        let devider: Decimal = pow(Decimal(integerLiteral: 10), 18)
         let result: Decimal = decimal / devider
         let formatter: NumberFormatter = NumberFormatter()
         formatter.maximumFractionDigits = 8
