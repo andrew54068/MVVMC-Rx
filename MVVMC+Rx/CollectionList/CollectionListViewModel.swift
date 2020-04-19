@@ -9,11 +9,6 @@
 import RxRelay
 import RxSwift
 
-//protocol CollectionListViewModelProtocol {
-//    var interactor: CollectionListInteractor { get set }
-//    var coordinator: Coordinator { get set }
-//}
-
 final class CollectionListViewModel {
 
     let models: PublishSubject<[CollectionModel]> = PublishSubject()

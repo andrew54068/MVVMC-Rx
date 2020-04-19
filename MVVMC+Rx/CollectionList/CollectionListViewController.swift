@@ -81,9 +81,6 @@ final class CollectionListViewController: UIViewController {
             .zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(CollectionModel.self))
             .bind { [weak self] indexPath, model in
                 self?.viewModel.present(with: model)
-//                print("选中项的indexPath为：\(indexPath)")
-//                print("选中项的标题为：\(model)")
-//                self?.navigationController?.pushViewController(CollectionDetailViewController(model: model), animated: true)
         }
         .disposed(by: bag)
 
