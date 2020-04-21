@@ -14,9 +14,8 @@ final class CollectionListViewModel {
     let balance: PublishSubject<String> = PublishSubject()
     var models: BehaviorSubject<[CollectionModel]> = BehaviorSubject(value: [])
     let error: PublishSubject<Error> = PublishSubject()
-
-    private(set) var loading: Bool = false
-    private(set) var loadingMore: Bool = false
+    let loading: BehaviorSubject<Bool> = BehaviorSubject(value: false)
+    let loadingMore: BehaviorSubject<Bool> = BehaviorSubject(value: false)
 
     var interactor: CollectionListInteractorProtocol
     var coordinator: CollectionListCoordinatorProtocol
@@ -32,10 +31,10 @@ final class CollectionListViewModel {
     }
 
     func fetchFirst() {
-        loading = true
+        loading.onNext(true)
         fetchAssets(page: 0)
             .subscribe({ [weak self] event in
-                self?.loading = false
+                self?.loading.onNext(false)
                 guard let self = self else { return }
                 switch event {
                 case let .next(models):
@@ -66,10 +65,10 @@ final class CollectionListViewModel {
     }
 
     func loadMore() {
-        loadingMore = true
+        loadingMore.onNext(true)
         fetchAssets(page: currentPage + 1)
             .subscribe({ [weak self] event in
-                self?.loadingMore = false
+                self?.loadingMore.onNext(false)
                 guard let self = self else { return }
                 switch event {
                 case let .next(models):

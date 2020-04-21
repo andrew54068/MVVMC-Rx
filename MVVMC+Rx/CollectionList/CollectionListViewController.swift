@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import RxCocoa
-import RxSwift
 import SnapKit
 import SDWebImage
 import RxDataSources
+import RxSwift
 
 struct CellModel: SectionModelType {
     typealias Item = CollectionModel
@@ -39,6 +38,8 @@ final class CollectionListViewController: UIViewController {
         layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
+        collectionView.registerCell(type: cellType)
+        collectionView.registerSectionFooter(type: footerType)
         return collectionView
     }()
 
@@ -96,9 +97,9 @@ final class CollectionListViewController: UIViewController {
                 })
             .disposed(by: bag)
 
-        collectionView.registerCell(type: cellType)
-
-        collectionView.registerSectionFooter(type: footerType)
+        viewModel.loading
+            .bind(to: rx.isLoading)
+            .disposed(by: bag)
 
         viewModel.error
             .subscribe { error in
@@ -110,12 +111,13 @@ final class CollectionListViewController: UIViewController {
         }
         .disposed(by: bag)
 
-        Observable
-            .zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(CollectionModel.self))
-            .bind { [weak self] indexPath, model in
+
+        collectionView.rx
+            .modelSelected(CollectionModel.self)
+            .subscribe(onNext: { [weak self] model in
                 self?.viewModel.present(with: model)
-        }
-        .disposed(by: bag)
+            })
+            .disposed(by: bag)
 
         Observable
             .zip(collectionView.rx.prefetchItems, viewModel.models)
@@ -133,19 +135,20 @@ final class CollectionListViewController: UIViewController {
 
         collectionView.rx
             .willDisplaySupplementaryView
-            .filter({ [weak self] (_, elementKind, _) -> Bool in
-                guard let self = self else { return false }
-                return elementKind == UICollectionView.elementKindSectionFooter && !self.viewModel.loadingMore && !self.viewModel.loading
+            .filter({ (_, elementKind, _) -> Bool in
+                return elementKind == UICollectionView.elementKindSectionFooter
             })
-            .subscribe(onNext: { [weak self] _, _, _ in
+            .withLatestFrom(viewModel.loadingMore)
+            .filter { !$0 }
+            .withLatestFrom(viewModel.models)
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.loadMore()
             })
             .disposed(by: bag)
 
         viewModel.models
-            .compactMap({
-                [CellModel(items: $0)]
-            })
+            .map { [CellModel(items: $0)] }
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: bag)
 
