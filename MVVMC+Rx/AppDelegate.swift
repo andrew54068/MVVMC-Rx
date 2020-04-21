@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import SDWebImageSVGKitPlugin
+import SDWebImageSVGKitPlugin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var appCoordinator: AppCoordinator?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        setupSVGDecoder()
+
         let window: UIWindow = .init()
         self.window = window
         let coordinator: AppCoordinator = AppCoordinator()
@@ -24,9 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-//    private func setupSVGDecoder() {
-//        let svgCoder = SDImageSVGKCoder.shared
-//        SDImageCodersManager.shared.addCoder(svgCoder)
-//    }
+    private func setupSVGDecoder() {
+        let svgCoder = SDImageSVGKCoder.shared
+        SDImageCodersManager.shared.addCoder(svgCoder)
+    }
 
 }

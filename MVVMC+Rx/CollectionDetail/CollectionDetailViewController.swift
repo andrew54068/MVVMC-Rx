@@ -45,8 +45,6 @@ final class CollectionDetailViewController: UIViewController {
         button.setTitle("permalink", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .clear
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true 
         return button
     }()
 

@@ -11,7 +11,6 @@ import Foundation
 extension Data {
 
     func decode<Model: Decodable>(type: Model.Type, decoder: JSONDecoder = JSONDecoder()) throws -> Model {
-        let decoder: JSONDecoder = .init()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(type, from: self)
     }
