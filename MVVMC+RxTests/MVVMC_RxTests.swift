@@ -37,12 +37,10 @@ class MVVMC_RxTests: XCTestCase {
         let exp = expectation(description: "Fetch groups")
 
         // This completion block should be called when groups are fetched
-        let observable: Observable<[CollectionModel]> = interactor.fetchAssets(page: 0)
-        observable
+        interactor.fetchAssets(page: 0)
             .observeOn(MainScheduler.instance)
             .subscribe({ event in
-                switch event {
-                case let .next(models):
+                if case let .next(models) = event {
                     XCTAssert(models.count == 2, "models count should be 2 but find \(models.count) instead.")
                     XCTAssert(models[0].tokenId == "first", "first model tokenId should be \"first\" but find \(models[0].tokenId) instead.")
                     XCTAssert(models[0].name == "name1", "first model name should be \"name1\" but find \(models[0].name) instead.")
@@ -52,11 +50,9 @@ class MVVMC_RxTests: XCTestCase {
                     XCTAssert(models[1].name == "name2", "first model name should be \"name2\" but find \(models[1].name) instead.")
                     XCTAssert(models[1].collectionName == "collectionName2", "first model name should be \"collectionName2\" but find \(models[0].collectionName) instead.")
                     exp.fulfill()
-                default:
-                    ()
                 }
             })
-        .disposed(by: bag)
+            .disposed(by: bag)
 
         waitForExpectations(timeout: 2.0, handler: nil)
     }
@@ -65,19 +61,15 @@ class MVVMC_RxTests: XCTestCase {
         let exp = expectation(description: "Fetch groups")
 
         // This completion block should be called when groups are fetched
-        let observable: Observable<String> = interactor.getBalance()
-        observable
+        interactor.getBalance()
             .observeOn(MainScheduler.instance)
             .subscribe({ event in
-                switch event {
-                case let .next(balance):
+                if case let .next(balance) = event {
                     XCTAssert(balance == "123.456", "balance should be \"123.456\" but find \(balance) instead.")
                     exp.fulfill()
-                default:
-                    ()
                 }
             })
-        .disposed(by: bag)
+            .disposed(by: bag)
 
         waitForExpectations(timeout: 2.0, handler: nil)
     }
