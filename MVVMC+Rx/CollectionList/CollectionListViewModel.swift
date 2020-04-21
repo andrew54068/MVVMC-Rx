@@ -12,13 +12,16 @@ import RxSwift
 final class CollectionListViewModel {
 
     let balance: PublishSubject<String> = PublishSubject()
-    let models: PublishSubject<[CollectionModel]> = PublishSubject()
-    let loading: PublishSubject<Bool> = PublishSubject()
+    var models: BehaviorSubject<[CollectionModel]> = BehaviorSubject(value: [])
     let error: PublishSubject<Error> = PublishSubject()
+
+    private(set) var loading: Bool = false
+    private(set) var loadingMore: Bool = false
 
     var interactor: CollectionListInteractorProtocol
     var coordinator: CollectionListCoordinatorProtocol
-    var currentPage: Int = 0
+
+    private var currentPage: Int = 0
 
     private let bag = DisposeBag()
 
@@ -28,19 +31,14 @@ final class CollectionListViewModel {
         self.coordinator = coordinator
     }
 
-    func fetchData() {
-        loading.onNext(true)
-        let observer: Observable<[CollectionModel]> = interactor.fetchAssets(page: currentPage)
-        observer
-            .observeOn(MainScheduler.instance)
+    func fetchFirst() {
+        loading = true
+        fetchAssets(page: 0)
             .subscribe({ [weak self] event in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.loading.onNext(false)
-                }
+                self?.loading = false
                 guard let self = self else { return }
                 switch event {
                 case let .next(models):
-                    self.currentPage += 1
                     self.models.onNext(models)
                 case let .error(error):
                     self.error.onNext(error)
@@ -50,8 +48,7 @@ final class CollectionListViewModel {
             })
             .disposed(by: bag)
 
-        let balanceObserver: Observable<String> = interactor.getBalance()
-        balanceObserver
+        interactor.getBalance()
             .observeOn(MainScheduler.instance)
             .subscribe({ [weak self] event in
                 guard let self = self else { return }
@@ -68,8 +65,48 @@ final class CollectionListViewModel {
 
     }
 
+    func loadMore() {
+        loadingMore = true
+        fetchAssets(page: currentPage + 1)
+            .subscribe({ [weak self] event in
+                self?.loadingMore = false
+                guard let self = self else { return }
+                switch event {
+                case let .next(models):
+                    self.currentPage += 1
+                    self.models.append(element: models)
+                case let .error(error):
+                    self.error.onNext(error)
+                default:
+                    ()
+                }
+            })
+            .disposed(by: bag)
+    }
+
+    private func fetchAssets(page: Int = 0) -> Observable<[CollectionModel]> {
+        return interactor.fetchAssets(page: page)
+        .observeOn(MainScheduler.instance)
+    }
+
     func present(with model: CollectionModel) {
         coordinator.navigate(with: model)
+    }
+
+}
+
+extension BehaviorSubject where Element: RangeReplaceableCollection {
+
+    func append(element: Element) {
+        do {
+            try onNext(value() + element)
+        } catch {
+            onError(error)
+        }
+    }
+
+    func add(element: Element) {
+
     }
 
 }

@@ -10,14 +10,32 @@ import UIKit
 import RxCocoa
 import RxSwift
 import SnapKit
+import SDWebImage
+import RxDataSources
+
+struct CellModel: SectionModelType {
+    typealias Item = CollectionModel
+    var items: [Item]
+
+    init(items: [CollectionModel]) {
+        self.items = items
+    }
+
+    init(original: CellModel, items: [CollectionModel]) {
+        self = original
+        self.items = items
+    }
+}
 
 final class CollectionListViewController: UIViewController {
 
-    private let collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = .init()
         layout.itemSize = .init(width: (UIScreen.main.bounds.width - 30) / 2, height: 200)
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
+        layout.headerReferenceSize = .zero
+        layout.footerReferenceSize = .init(width: view.bounds.width, height: 50)
         layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
@@ -25,6 +43,23 @@ final class CollectionListViewController: UIViewController {
     }()
 
     private let viewModel: CollectionListViewModel
+
+    private var cellType: CollectionListCollectionViewCell.Type { CollectionListCollectionViewCell.self }
+    private var footerType: CollectionListFooter.Type { CollectionListFooter.self }
+
+    private let dataSource = RxCollectionViewSectionedReloadDataSource<CellModel>.init(
+        configureCell: { (dataSource, collectionView, indexPath, model) -> UICollectionViewCell in
+            let cell: CollectionListCollectionViewCell = collectionView.dequeueReusableCell(with: CollectionListCollectionViewCell.self, for: indexPath)
+            cell.setup(model: model)
+            return cell
+    }, configureSupplementaryView: { (dataSource, collectionView, string, indexPath) -> UICollectionReusableView in
+        if string == UICollectionView.elementKindSectionFooter {
+            let footer: CollectionListFooter = collectionView.dequeueReusableSectionFooter(with: CollectionListFooter.self, for: indexPath)
+            return footer
+        } else {
+            return UICollectionReusableView()
+        }
+    })
 
     private let bag: DisposeBag = DisposeBag()
 
@@ -42,7 +77,8 @@ final class CollectionListViewController: UIViewController {
         setupUI()
         setupBindings()
         setupNavigation()
-        viewModel.fetchData()
+
+        viewModel.fetchFirst()
     }
 
     private func setupUI() {
@@ -60,20 +96,9 @@ final class CollectionListViewController: UIViewController {
                 })
             .disposed(by: bag)
 
-        viewModel.loading
-            .bind(to: self.rx.isLoading)
-            .disposed(by: bag)
-
-        let cellType: CollectionListCollectionViewCell.Type = CollectionListCollectionViewCell.self
         collectionView.registerCell(type: cellType)
 
-        viewModel.models
-            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: cellType),
-                                              cellType: cellType)) { _, model, cell in
-                                                cell.setup(model: model)
-        }
-        .disposed(by: bag)
-
+        collectionView.registerSectionFooter(type: footerType)
 
         viewModel.error
             .subscribe { error in
@@ -91,6 +116,38 @@ final class CollectionListViewController: UIViewController {
                 self?.viewModel.present(with: model)
         }
         .disposed(by: bag)
+
+        Observable
+            .zip(collectionView.rx.prefetchItems, viewModel.models)
+            .bind { indexPaths, models in
+                let urls: [URL] = indexPaths.compactMap {
+                    if models.count > $0.item {
+                        return models[$0.item].imageUrl
+                    } else {
+                        return nil
+                    }
+                }
+                SDWebImagePrefetcher.shared.prefetchURLs(urls)
+            }
+        .disposed(by: bag)
+
+        collectionView.rx
+            .willDisplaySupplementaryView
+            .filter({ [weak self] (_, elementKind, _) -> Bool in
+                guard let self = self else { return false }
+                return elementKind == UICollectionView.elementKindSectionFooter && !self.viewModel.loadingMore && !self.viewModel.loading
+            })
+            .subscribe(onNext: { [weak self] _, _, _ in
+                self?.viewModel.loadMore()
+            })
+            .disposed(by: bag)
+
+        viewModel.models
+            .compactMap({
+                [CellModel(items: $0)]
+            })
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: bag)
 
     }
 

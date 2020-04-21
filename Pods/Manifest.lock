@@ -1,8 +1,6 @@
 PODS:
   - Alamofire (5.0.4)
-  - CocoaLumberjack (3.6.1):
-    - CocoaLumberjack/Core (= 3.6.1)
-  - CocoaLumberjack/Core (3.6.1)
+  - Differentiator (4.0.1)
   - Moya (14.0.0):
     - Moya/Core (= 14.0.0)
   - Moya/Core (14.0.0):
@@ -10,48 +8,48 @@ PODS:
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
+  - SDWebImage (5.6.1):
+    - SDWebImage/Core (= 5.6.1)
   - SDWebImage/Core (5.6.1)
-  - SDWebImageSVGKitPlugin (1.2.0):
-    - SDWebImage/Core (~> 5.6)
-    - SVGKit (>= 2.1)
   - SnapKit (5.0.1)
-  - SVGKit (2.1.1):
-    - CocoaLumberjack (~> 3.0)
 
 DEPENDENCIES:
   - Moya
   - RxCocoa
-  - SDWebImageSVGKitPlugin
+  - RxDataSources
+  - SDWebImage
   - SnapKit
 
 SPEC REPOS:
   trunk:
     - Alamofire
-    - CocoaLumberjack
+    - Differentiator
     - Moya
     - RxCocoa
+    - RxDataSources
     - RxRelay
     - RxSwift
     - SDWebImage
-    - SDWebImageSVGKitPlugin
     - SnapKit
-    - SVGKit
 
 SPEC CHECKSUMS:
   Alamofire: 0fe5fd24b4298dc377a6550da7d5f1b30e286fcb
-  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
-  SDWebImageSVGKitPlugin: 06a811c05b9e839982baeb5251d15fe7a79abb82
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SVGKit: 652cdf7bef8bec8564d04a8511d3ab50c7595fac
 
-PODFILE CHECKSUM: 0b3ecadd23e2b19cbe9f0e9cdc2405cc98dfe28c
+PODFILE CHECKSUM: 7018304678495f8599ffc726f95e6fa037f31d4b
 
 COCOAPODS: 1.8.4
