@@ -23,7 +23,8 @@ final class CollectionListCoordinator: CollectionListCoordinatorProtocol {
         let detailCoordinator = CollectionDetailCoordinator(navigator: navigator)
         let detailInteractor = CollectionDetailInteractor(model: model)
         let detailViewModel = CollectionDetailViewModel(interactor: detailInteractor,
-                                                        coordinator: detailCoordinator)
+                                                        coordinator: detailCoordinator,
+                                                        model: model)
         let detailViewController = CollectionDetailViewController(viewModel: detailViewModel)
 
         navigator?.pushViewController(detailViewController, animated: true)

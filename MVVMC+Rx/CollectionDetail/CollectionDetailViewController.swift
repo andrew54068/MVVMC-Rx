@@ -53,7 +53,6 @@ final class CollectionDetailViewController: UIViewController {
     init(viewModel: CollectionDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        setupBindings()
     }
 
     required init?(coder: NSCoder) {
@@ -63,6 +62,7 @@ final class CollectionDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupBindings()
     }
 
     private func setupUI() {
@@ -118,7 +118,8 @@ final class CollectionDetailViewController: UIViewController {
                 self?.nameLabel.text = model.name
                 self?.desLabel.text = model.description
                 self?.title = model.collectionName
-            }).disposed(by: bag)
+            })
+            .disposed(by: bag)
 
     }
 

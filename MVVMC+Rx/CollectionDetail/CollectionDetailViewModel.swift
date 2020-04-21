@@ -15,12 +15,14 @@ final class CollectionDetailViewModel {
     var coordinator: CollectionDetailCoordinator
 
     var modelObservable: Observable<CollectionModel> { return modelSubject.asObserver() }
-    var modelSubject: PublishSubject<CollectionModel> = PublishSubject()
+    var modelSubject: BehaviorSubject<CollectionModel>
 
     init(interactor: CollectionDetailInteractor,
-         coordinator: CollectionDetailCoordinator) {
+         coordinator: CollectionDetailCoordinator,
+         model: CollectionModel) {
         self.interactor = interactor
         self.coordinator = coordinator
+        modelSubject = BehaviorSubject(value: model)
     }
     
 }
