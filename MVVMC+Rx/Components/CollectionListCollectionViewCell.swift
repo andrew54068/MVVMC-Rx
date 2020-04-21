@@ -55,6 +55,8 @@ final class CollectionListCollectionViewCell: UICollectionViewCell {
             make.height.greaterThanOrEqualTo(30)
         }
 
+        nameLabel.setContentCompressionResistancePriority(.init(751), for: .vertical)
+
     }
 
     func setup(model: CollectionModel) {
