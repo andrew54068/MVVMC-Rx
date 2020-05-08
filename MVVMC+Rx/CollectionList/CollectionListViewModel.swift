@@ -8,104 +8,79 @@
 
 import RxRelay
 import RxSwift
+import RxCocoa
 
 final class CollectionListViewModel {
-
-    let balance: PublishSubject<String> = PublishSubject()
-    var models: BehaviorSubject<[CollectionModel]> = BehaviorSubject(value: [])
-    let error: PublishSubject<Error> = PublishSubject()
-    let loading: BehaviorSubject<Bool> = BehaviorSubject(value: false)
-    let loadingMore: BehaviorSubject<Bool> = BehaviorSubject(value: false)
-
-    var interactor: CollectionListInteractorProtocol
-    var coordinator: CollectionListCoordinatorProtocol
-
-    private var currentPage: Int = 0
-
+    private let coordinator: CollectionListCoordinatorProtocol
+    private let modelsRelay = PublishRelay<[[CollectionModel]]>()
+    private let balanceRelay = PublishRelay<String>()
+    private let fetchModelsTrigger = PublishRelay<Void>()
+    private let fetchBalanceTrigger = PublishRelay<Void>()
     private let bag = DisposeBag()
+
+    let models: Driver<[CollectionModel]>
+    let balance: Driver<String>
+    let error: Driver<Error>
+    let isLoading: Driver<Bool>
+
 
     init(interactor: CollectionListInteractorProtocol,
          coordinator: CollectionListCoordinatorProtocol) {
-        self.interactor = interactor
         self.coordinator = coordinator
+
+        models = modelsRelay.map { $0.flatMap { $0 } }
+            .asDriver(onErrorJustReturn: [])
+        balance = balanceRelay
+            .asDriver(onErrorJustReturn: "")
+
+        let modelStream = fetchModelsTrigger
+            .withLatestFrom(modelsRelay)
+            .flatMapFirst { models in
+                interactor.fetchAssets(page: models.count).map { models + [$0] }
+            }
+
+        isLoading = Observable.merge(
+            fetchModelsTrigger.map { true },
+            modelStream.map { _ in false }
+                .catchError { _ in .just(false) }
+        )
+            .asDriver(onErrorJustReturn: false)
+
+        modelStream
+            .catchError { _ in .empty() }
+            .bind(to: modelsRelay)
+            .disposed(by: bag)
+
+        let balanceStream = fetchBalanceTrigger
+            .flatMapFirst { interactor.getBalance() }
+        balanceStream
+            .catchError { _ in .empty() }
+            .bind(to: balanceRelay)
+            .disposed(by: bag)
+
+
+        error = Observable.merge(
+            modelStream.compactMap { _ in nil }
+                .catchError { .just($0) },
+            balanceStream.compactMap { _ in nil }
+                .catchError { .just($0) }
+        )
+            .asDriver(onErrorDriveWith: .empty())
+
     }
 
     func fetchFirst() {
-        loading.onNext(true)
-        fetchAssets(page: 0)
-            .subscribe({ [weak self] event in
-                self?.loading.onNext(false)
-                guard let self = self else { return }
-                switch event {
-                case let .next(models):
-                    self.models.onNext(models)
-                case let .error(error):
-                    self.error.onNext(error)
-                default:
-                    ()
-                }
-            })
-            .disposed(by: bag)
-
-        interactor.getBalance()
-            .observeOn(MainScheduler.instance)
-            .subscribe({ [weak self] event in
-                guard let self = self else { return }
-                switch event {
-                case let .next(balance):
-                    self.balance.onNext(balance)
-                case let .error(error):
-                    self.error.onNext(error)
-                default:
-                    ()
-                }
-            })
-            .disposed(by: bag)
-
+        modelsRelay.accept([])
+        fetchModelsTrigger.accept(())
+        fetchBalanceTrigger.accept(())
     }
 
     func loadMore() {
-        loadingMore.onNext(true)
-        fetchAssets(page: currentPage + 1)
-            .subscribe({ [weak self] event in
-                self?.loadingMore.onNext(false)
-                guard let self = self else { return }
-                switch event {
-                case let .next(models):
-                    self.currentPage += 1
-                    self.models.append(element: models)
-                case let .error(error):
-                    self.error.onNext(error)
-                default:
-                    ()
-                }
-            })
-            .disposed(by: bag)
-    }
-
-    private func fetchAssets(page: Int = 0) -> Observable<[CollectionModel]> {
-        return interactor.fetchAssets(page: page)
-        .observeOn(MainScheduler.instance)
+        fetchModelsTrigger.accept(())
     }
 
     func present(with model: CollectionModel) {
         coordinator.navigate(with: model)
-    }
-
-}
-
-extension BehaviorSubject where Element: RangeReplaceableCollection {
-
-    func append(element: Element) {
-        do {
-            try onNext(value() + element)
-        } catch {
-            onError(error)
-        }
-    }
-
-    func add(element: Element) {
-
     }
 
 }

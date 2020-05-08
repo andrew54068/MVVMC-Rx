@@ -92,24 +92,22 @@ final class CollectionListViewController: UIViewController {
     private func setupBindings() {
 
         viewModel.balance
-            .subscribe(onNext: { [weak self] balance in
-                self?.title = balance
-                })
+            .drive(rx.title)
             .disposed(by: bag)
 
-        viewModel.loading
-            .bind(to: rx.isLoading)
+        viewModel.isLoading
+            .drive(rx.isLoading)
             .disposed(by: bag)
 
         viewModel.error
-            .subscribe { error in
+            .drive(onNext: {[weak self] error in
                 let alert = UIAlertController(title: "Error",
-                                              message: error.debugDescription,
+                                              message: error.localizedDescription,
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-        }
-        .disposed(by: bag)
+                self?.present(alert, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
 
 
         collectionView.rx
@@ -119,27 +117,27 @@ final class CollectionListViewController: UIViewController {
             })
             .disposed(by: bag)
 
-        Observable
-            .zip(collectionView.rx.prefetchItems, viewModel.models)
-            .bind { indexPaths, models in
-                let urls: [URL] = indexPaths.compactMap {
+        collectionView.rx.prefetchItems
+            .withLatestFrom(viewModel.models) { ($0, $1) }
+            .map { indexPaths, models in
+                indexPaths.compactMap {
                     if models.count > $0.item {
                         return models[$0.item].imageUrl
                     } else {
                         return nil
                     }
                 }
-                SDWebImagePrefetcher.shared.prefetchURLs(urls)
             }
-        .disposed(by: bag)
+            .subscribe(onNext: {
+                SDWebImagePrefetcher.shared.prefetchURLs($0)
+            })
+            .disposed(by: bag)
 
         collectionView.rx
             .willDisplaySupplementaryView
-            .filter({ (_, elementKind, _) -> Bool in
-                return elementKind == UICollectionView.elementKindSectionFooter
-            })
-            .withLatestFrom(viewModel.loadingMore)
-            .filter { !$0 }
+            .filter { _, elementKind, _ in
+                elementKind == UICollectionView.elementKindSectionFooter
+            }
             .withLatestFrom(viewModel.models)
             .filter { !$0.isEmpty }
             .subscribe(onNext: { [weak self] _ in
@@ -149,7 +147,7 @@ final class CollectionListViewController: UIViewController {
 
         viewModel.models
             .map { [CellModel(items: $0)] }
-            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: bag)
 
     }
