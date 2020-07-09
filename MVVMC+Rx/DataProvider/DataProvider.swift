@@ -8,7 +8,7 @@
 
 import Moya
 import Alamofire
-
+import RxSwift
 enum CollectionModelResult {
     case model([CollectionModel])
     case error(Error)
@@ -28,38 +28,30 @@ class DataProvider {
 
     private init() { }
 
-    func fetch(owner: String, page: Int, completion: @escaping (CollectionModelResult) -> Void) {
-        let target: AssetApi = .asset(owner: owner, page: page)
-        MoyaProvider.default.request(target) { result in
-            switch result {
-            case let .success(response):
-                do {
-                    let model: CollectionContainerModel = try response.data.decode(type: CollectionContainerModel.self)
-                    completion(.model(model.assets))
-                } catch {
-                    completion(.error(error))
+    private func request<M: Decodable>(api: AssetApi, decodable: M.Type) -> Single<M> {
+        Single<Moya.Response>.create { emitter in
+            let task = MoyaProvider.default.request(api) { result in
+                switch result {
+                case let .success(response):
+                    emitter(.success(response))
+                case let .failure(moyaError):
+                    emitter(.error(moyaError))
                 }
-            case let .failure(moyaError):
-                completion(.error(moyaError))
             }
+            return Disposables.create { task.cancel() }
+        }
+        .map {
+            try $0.data.decode(type: M.self)
         }
     }
 
-    func getBalance(address: String, completion: @escaping (BalanceModelResult) -> Void) {
-        let target: AssetApi = .balance(address: address)
-        MoyaProvider.default.request(target) { result in
-            switch result {
-            case let .success(response):
-                do {
-                    let model: BalanceModel = try response.data.decode(type: BalanceModel.self)
-                    completion(.model(model.balanceValue))
-                } catch {
-                    completion(.error(error))
-                }
-            case let .failure(moyaError):
-                completion(.error(moyaError))
-            }
-        }
+    func fetch(owner: String, page: Int) -> Single<[CollectionModel]> {
+        request(api: .asset(owner: owner, page: page), decodable: CollectionContainerModel.self)
+            .map { $0.assets }
+    }
+
+    func getBalance(address: String) -> Single<BalanceModel> {
+        request(api: .balance(address: address), decodable: BalanceModel.self)
     }
 
 }

@@ -10,8 +10,8 @@ import RxRelay
 import RxSwift
 
 protocol CollectionListInteractorProtocol {
-    func fetchAssets(page: Int) -> Observable<[CollectionModel]>
-    func getBalance() -> Observable<String>
+    func fetchAssets(page: Int) -> Single<[CollectionModel]>
+    func getBalance() -> Single<String>
 }
 
 final class CollectionListInteractor: CollectionListInteractorProtocol {
@@ -24,34 +24,12 @@ final class CollectionListInteractor: CollectionListInteractorProtocol {
         self.dataProvider = dataProvider
     }
 
-    func fetchAssets(page: Int) -> Observable<[CollectionModel]> {
-        return Observable<[CollectionModel]>.create { [weak self] observer -> Disposable in
-            guard let self = self else { return Disposables.create() }
-            DataProvider.shared.fetch(owner: self.owner, page: page) { result in
-                switch result {
-                case let .model(collectionModels):
-                    observer.onNext(collectionModels)
-                case let .error(error):
-                    observer.onError(error)
-                }
-            }
-            return Disposables.create()
-        }
+    func fetchAssets(page: Int) -> Single<[CollectionModel]> {
+        DataProvider.shared.fetch(owner: self.owner, page: page) 
     }
 
-    func getBalance() -> Observable<String> {
-        return Observable<String>.create { [weak self] observer -> Disposable in
-            guard let self = self else { return Disposables.create() }
-            DataProvider.shared.getBalance(address: self.owner) { result in
-                switch result {
-                case let .model(balance):
-                    observer.onNext(balance)
-                case let .error(error):
-                    observer.onError(error)
-                }
-            }
-            return Disposables.create()
-        }
+    func getBalance() -> Single<String> {
+        DataProvider.shared.getBalance(address: self.owner).map { $0.balanceValue }
     }
 
 }
