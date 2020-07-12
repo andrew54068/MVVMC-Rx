@@ -39,18 +39,16 @@ class MVVMC_RxTests: XCTestCase {
         // This completion block should be called when groups are fetched
         interactor.fetchAssets(page: 0)
             .observeOn(MainScheduler.instance)
-            .subscribe({ event in
-                if case let .next(models) = event {
-                    XCTAssert(models.count == 2, "models count should be 2 but find \(models.count) instead.")
-                    XCTAssert(models[0].tokenId == "first", "first model tokenId should be \"first\" but find \(models[0].tokenId) instead.")
-                    XCTAssert(models[0].name == "name1", "first model name should be \"name1\" but find \(models[0].name) instead.")
-                    XCTAssert(models[0].collectionName == "collectionName1", "first model name should be \"collectionName1\" but find \(models[0].collectionName) instead.")
+            .subscribe(onSuccess: { models in
+                XCTAssert(models.count == 2, "models count should be 2 but find \(models.count) instead.")
+                XCTAssert(models[0].tokenId == "first", "first model tokenId should be \"first\" but find \(models[0].tokenId) instead.")
+                XCTAssert(models[0].name == "name1", "first model name should be \"name1\" but find \(models[0].name) instead.")
+                XCTAssert(models[0].collectionName == "collectionName1", "first model name should be \"collectionName1\" but find \(models[0].collectionName) instead.")
 
-                    XCTAssert(models[1].tokenId == "second", "second model tokenId should be \"second\" but find \(models[1].tokenId) instead.")
-                    XCTAssert(models[1].name == "name2", "first model name should be \"name2\" but find \(models[1].name) instead.")
-                    XCTAssert(models[1].collectionName == "collectionName2", "first model name should be \"collectionName2\" but find \(models[0].collectionName) instead.")
-                    exp.fulfill()
-                }
+                XCTAssert(models[1].tokenId == "second", "second model tokenId should be \"second\" but find \(models[1].tokenId) instead.")
+                XCTAssert(models[1].name == "name2", "first model name should be \"name2\" but find \(models[1].name) instead.")
+                XCTAssert(models[1].collectionName == "collectionName2", "first model name should be \"collectionName2\" but find \(models[0].collectionName) instead.")
+                exp.fulfill()
             })
             .disposed(by: bag)
 
@@ -63,11 +61,9 @@ class MVVMC_RxTests: XCTestCase {
         // This completion block should be called when groups are fetched
         interactor.getBalance()
             .observeOn(MainScheduler.instance)
-            .subscribe({ event in
-                if case let .next(balance) = event {
-                    XCTAssert(balance == "123.456", "balance should be \"123.456\" but find \(balance) instead.")
-                    exp.fulfill()
-                }
+            .subscribe(onSuccess: { balance in
+                XCTAssert(balance == "123.456", "balance should be \"123.456\" but find \(balance) instead.")
+                exp.fulfill()
             })
             .disposed(by: bag)
 
@@ -80,8 +76,8 @@ class MVVMC_RxTests: XCTestCase {
 
 class ListFakeInteractor: CollectionListInteractorProtocol {
 
-    func fetchAssets(page: Int) -> Observable<[CollectionModel]> {
-        return Observable<[CollectionModel]>.just([
+    func fetchAssets(page: Int) -> Single<[CollectionModel]> {
+        return Single<[CollectionModel]>.just([
             CollectionModel(tokenId: "first",
                             name: "name1",
                             collectionName: "collectionName1"),
@@ -91,8 +87,8 @@ class ListFakeInteractor: CollectionListInteractorProtocol {
         ])
     }
 
-    func getBalance() -> Observable<String> {
-        return Observable<String>.just("123.456")
+    func getBalance() -> Single<String> {
+        return Single<String>.just("123.456")
     }
 
 }
